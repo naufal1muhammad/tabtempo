@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using tabtempo_api.DTOs;
 
 namespace tabtempo_api.Hubs
 {
@@ -18,7 +19,13 @@ namespace tabtempo_api.Hubs
 
             await base.OnConnectedAsync();
         }
-
         // (You can add hub methods here—e.g., SendMessage, etc.)
+        public async Task SendEvent(EventDto eventDto)
+        {
+            // Broadcast the incoming event to all clients in the room group
+            await Clients
+                .Group(eventDto.RoomId)
+                .SendAsync("ReceiveEvent", eventDto);
+        }
     }
 }

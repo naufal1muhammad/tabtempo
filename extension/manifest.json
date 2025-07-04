@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "TabTempo Extension",
+  "version": "0.1.0",
+  "description": "Collects tab data and streams it to TabTempo",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "permissions": []
+}

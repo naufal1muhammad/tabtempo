@@ -10,5 +10,9 @@
     "default_popup": "popup.html",
     "default_icon": "icon.png"
   },
-  "permissions": []
+  "permissions": [
+    "tabs",
+    "storage",
+    "activeTab"
+  ]
 }

@@ -1,47 +1,53 @@
-// Load the SignalR client library
 importScripts('signalr.min.js');
 
 const ROOM_ID = 'devroom';
 
-// Build the connection (using WebSockets transport under the hood)
-const connection = new signalR.HubConnectionBuilder()
-  .withUrl(`wss://localhost:5001/hub/${ROOM_ID}`)
-  .withAutomaticReconnect()
-  .build();
-
-// Start the connection
-connection.start()
-  .then(() => {
-    console.log(`✅ Connected to SignalR hub in room "${ROOM_ID}"`);
-  })
-  .catch(err => {
-    console.error("❌ SignalR connection error:", err);
-  });
-
-// Create a repeating alarm named "pollActiveTab" every 1 minute
-chrome.alarms.create("pollActiveTab", {
-  periodInMinutes: 1
-});
-
-// Listen for the alarm and send the active tab info over SignalR
+// 1) Register your alarm handler
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name !== "pollActiveTab") return;
 
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs.length === 0) return;
-    const activeTab = tabs[0];
-
+    if (!tabs[0]) return;
+    const t = tabs[0];
     const data = {
-      tabId: activeTab.id,
-      title: activeTab.title,
-      url: activeTab.url,
+      tabId:   t.id,
+      title:   t.title,
+      url:     t.url,
       timestamp: new Date().toISOString()
     };
 
+    console.log("Polled via alarm:", data);
     connection.invoke("SendEvent", {
       roomId: ROOM_ID,
       eventType: "tabInfo",
       payload: data
     }).catch(err => console.error("❌ SendEvent failed:", err));
   });
+});
+
+// 2) Bootstrap SignalR
+const connection = new signalR.HubConnectionBuilder()
+  .withUrl(`https://localhost:5001/hub/${ROOM_ID}`)
+  .withAutomaticReconnect()
+  .build();
+
+connection.start()
+  .then(() => console.log(`✅ Connected to SignalR hub in room "${ROOM_ID}"`))
+  .catch(err => console.error("❌ SignalR connection error:", err));
+
+// 3) Do an immediate manual poll once on load (optional)
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  if (tabs[0]) {
+    console.log("Manual poll on load:", {
+      id:        tabs[0].id,
+      title:     tabs[0].title,
+      url:       tabs[0].url,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// 4) Schedule a recurring alarm every 1 minute
+chrome.alarms.create("pollActiveTab", {
+  periodInMinutes: 1
 });

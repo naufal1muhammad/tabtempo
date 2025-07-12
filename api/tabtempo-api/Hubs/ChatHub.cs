@@ -1,10 +1,16 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using tabtempo_api.Data;
 using tabtempo_api.DTOs;
+using System.Text.Json;
 
 namespace tabtempo_api.Hubs
 {
     public class ChatHub : Hub
     {
+        private readonly TabTempoDbContext _db;
+        public ChatHub(TabTempoDbContext db) => _db = db;
         public override async Task OnConnectedAsync()
         {
             // Pull the roomId route parameter
@@ -22,7 +28,18 @@ namespace tabtempo_api.Hubs
         // (You can add hub methods here—e.g., SendMessage, etc.)
         public async Task SendEvent(EventDto eventDto)
         {
-            // Broadcast the incoming event to all clients in the room group
+            // Persist to Postgres
+            var evt = new Event
+            {
+                RoomId = eventDto.RoomId,
+                EventType = eventDto.EventType,
+                Payload = JsonDocument.Parse(eventDto.Payload.GetRawText()),
+                CreatedAt = DateTime.UtcNow
+            };
+            _db.Events.Add(evt);
+            await _db.SaveChangesAsync();
+
+            // Then broadcast
             await Clients
                 .Group(eventDto.RoomId)
                 .SendAsync("ReceiveEvent", eventDto);

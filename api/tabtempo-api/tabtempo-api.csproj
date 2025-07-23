@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>tabtempo_api</RootNamespace>
+    <UserSecretsId>d05319eb-da8e-4409-a7f5-d2c67560144c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

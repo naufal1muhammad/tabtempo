@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head><title>TabTempo</title></head>
+  <head>
+    <meta charset="utf-8" />
+    <title>TabTempo</title>
+    <style>
+      body { font-family: sans-serif; padding: 1rem; width: 200px; }
+      input, button { width: 100%; margin-top: 0.5rem; }
+    </style>
+  </head>
   <body>
-    <h1>TabTempo</h1>
-    <p>Extension UI goes here.</p>
+    <h2>TabTempo</h2>
+    <label for="roomInput">Enter Room ID:</label>
+    <input type="text" id="roomInput" placeholder="e.g. devroom" />
+    <button id="saveButton">Save Room ID</button>
+    <p id="status" style="font-size:0.9em;color:green"></p>
+    <script src="popup.js"></script>
   </body>
 </html>

@@ -20,5 +20,6 @@ button.addEventListener('click', () => {
     status.style.color = 'green';
     // clear message after 2s
     setTimeout(() => (status.textContent = ''), 2000);
+    chrome.runtime.reload();
   });
 });

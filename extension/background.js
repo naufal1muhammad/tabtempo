@@ -7,11 +7,19 @@ function initWithRoom(roomId) {
     return;
   }
 
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaXJvb20iLCJyb29tIjoib2lyb29tIiwiZXhwIjoxNzUzNDM0MTQwLCJpc3MiOiJUYWJUZW1wb0FQSSIsImF1ZCI6IlRhYlRlbXBvQ2xpZW50In0.CW7Gd-DxY-4n0iUM9Wu_PhMYh1ine-kZHgCDnKBiu2A";
+const connection = new signalR.HubConnectionBuilder()
+  .withUrl(`https://localhost:5001/hub/${roomId}`, {
+    accessTokenFactory: () => Promise.resolve(token)
+  })
+  .withAutomaticReconnect()
+  .build();
+
   // Build and start the SignalR connection
-  const connection = new signalR.HubConnectionBuilder()
-    .withUrl(`https://localhost:5001/hub/${roomId}`)
-    .withAutomaticReconnect()
-    .build();
+//   const connection = new signalR.HubConnectionBuilder()
+//     .withUrl(`https://localhost:5001/hub/${roomId}`)
+//     .withAutomaticReconnect()
+//     .build();
 
   connection.start()
     .then(() => console.log(`✅ Connected to SignalR hub in room "${roomId}"`))

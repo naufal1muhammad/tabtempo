@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
 using tabtempo_api.Data;
 using tabtempo_api.DTOs;
 using System.Text.Json;
 
 namespace tabtempo_api.Hubs
 {
+    [Authorize]
     public class ChatHub : Hub
     {
         private readonly TabTempoDbContext _db;

@@ -7,7 +7,7 @@ function initWithRoom(roomId) {
     return;
   }
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaXJvb20iLCJyb29tIjoib2lyb29tIiwiZXhwIjoxNzUzNDM0MTQwLCJpc3MiOiJUYWJUZW1wb0FQSSIsImF1ZCI6IlRhYlRlbXBvQ2xpZW50In0.CW7Gd-DxY-4n0iUM9Wu_PhMYh1ine-kZHgCDnKBiu2A";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaXJvb20iLCJyb29tIjoib2lyb29tIiwiZXhwIjoxNzUzNTA2MDU1LCJpc3MiOiJUYWJUZW1wb0FQSSIsImF1ZCI6IlRhYlRlbXBvQ2xpZW50In0.oSpnFHU1w_SV1R-2V1YustaicCPos9615EDs98FrjqM";
 const connection = new signalR.HubConnectionBuilder()
   .withUrl(`https://localhost:5001/hub/${roomId}`, {
     accessTokenFactory: () => Promise.resolve(token)
